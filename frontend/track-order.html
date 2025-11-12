@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Track Order | ShopKart</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Poppins", system-ui, Arial; background: #f1f3f6; color: #222; }
+    
+    /* Navbar */
+    .navbar {
+      background: #2874f0; color: #fff; padding: 12px 20px; display: flex;
+      align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .logo { font-weight: 700; font-size: 1.25rem; cursor: pointer; }
+    .nav-links a { color: #fff; margin-left: 16px; font-weight: 600; text-decoration: none; }
+    .nav-links a:hover { text-decoration: underline; }
+
+    /* Main container */
+    .container { width: 92%; max-width: 900px; margin: 30px auto; }
+
+    /* Back button */
+    .back-btn {
+      display: inline-block; padding: 10px 14px; background: #e8e8e8; color: #333;
+      border-radius: 6px; text-decoration: none; margin-bottom: 20px; font-weight: 600;
+      cursor: pointer; border: none; font-size: 0.95rem;
+    }
+    .back-btn:hover { background: #d0d0d0; }
+
+    /* Card */
+    .card { background: #fff; border-radius: 10px; padding: 24px; box-shadow: 0 6px 18px rgba(0,0,0,0.06); margin-bottom: 20px; }
+
+    h1 { color: #2874f0; margin-bottom: 8px; }
+    .subtitle { color: #666; margin-bottom: 20px; }
+
+    /* Order Info */
+    .order-info {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px;
+      padding: 16px; background: #f9f9f9; border-radius: 8px;
+    }
+    .info-item { }
+    .info-label { font-weight: 700; color: #666; font-size: 0.9rem; margin-bottom: 4px; }
+    .info-value { color: #2874f0; font-weight: 600; font-size: 1rem; }
+
+    /* Timeline / Status */
+    .timeline {
+      display: flex; justify-content: space-between; align-items: center;
+      margin: 30px 0; position: relative;
+    }
+    .timeline::before {
+      content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 3px;
+      background: #e0e0e0; z-index: -1;
+    }
+
+    .status-step {
+      display: flex; flex-direction: column; align-items: center; flex: 1;
+    }
+    .status-circle {
+      width: 50px; height: 50px; border-radius: 50%; background: #e0e0e0;
+      color: #999; font-size: 24px; display: flex; align-items: center; justify-content: center;
+      margin-bottom: 10px; font-weight: 700;
+    }
+    .status-step.completed .status-circle {
+      background: #28a745; color: #fff;
+    }
+    .status-step.active .status-circle {
+      background: #2874f0; color: #fff;
+    }
+
+    .status-label { text-align: center; font-size: 0.95rem; font-weight: 600; color: #333; }
+    .status-step.completed .status-label { color: #28a745; }
+    .status-step.active .status-label { color: #2874f0; }
+    .status-step.pending .status-label { color: #999; }
+
+    .status-date { font-size: 0.85rem; color: #666; margin-top: 4px; }
+
+    /* Details */
+    .details {
+      margin-top: 24px; padding: 16px; background: #f9f9f9; border-radius: 8px;
+    }
+    .details-title { font-weight: 700; color: #333; margin-bottom: 12px; }
+    .detail-item { margin: 8px 0; padding: 8px 0; border-bottom: 1px solid #e0e0e0; }
+    .detail-item:last-child { border-bottom: none; }
+    .detail-label { font-weight: 600; color: #666; }
+    .detail-value { color: #333; margin-left: 8px; }
+
+    /* Buttons */
+    .buttons {
+      display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap;
+    }
+    .btn {
+      padding: 12px 20px; border-radius: 8px; border: none; cursor: pointer;
+      font-weight: 700; text-decoration: none; display: inline-block; text-align: center;
+    }
+    .btn-primary { background: #2874f0; color: #fff; }
+    .btn-primary:hover { background: #1e5edb; }
+    .btn-secondary { background: #fb641b; color: #fff; }
+    .btn-secondary:hover { background: #f27a2f; }
+
+    /* Footer */
+    footer {
+      background: #172337; color: #fff; text-align: center; padding: 14px 0;
+      margin-top: 60px;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .order-info { grid-template-columns: 1fr; }
+      .timeline { flex-direction: column; margin: 20px 0; }
+      .timeline::before { display: none; }
+      .status-step { margin: 16px 0; }
+      .buttons { flex-direction: column; }
+      .btn { width: 100%; }
+      .card { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo" onclick="location.href='home.html'" style="cursor: pointer;">ShopKart</div>
+    <div class="nav-links">
+      <a href="abc.html">Login</a>
+      <a href="cart.html">Cart 🛒</a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <button class="back-btn" onclick="history.back()">← Back</button>
+
+    <!-- Order Info Card -->
+    <div class="card">
+      <h1>📦 Track Your Order</h1>
+      <p class="subtitle">Monitor your delivery status in real-time</p>
+
+      <div class="order-info">
+        <div class="info-item">
+          <div class="info-label">Order ID</div>
+          <div class="info-value" id="displayOrderId">#SK123456</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Order Date</div>
+          <div class="info-value" id="displayOrderDate">Today</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Estimated Delivery</div>
+          <div class="info-value">3-5 Business Days</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Status</div>
+          <div class="info-value" id="displayStatus">Processing</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="card">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <h2 style="color: #2874f0; font-size: 1.1rem;">Delivery Timeline</h2>
+      </div>
+
+      <div class="timeline">
+        <div class="status-step completed">
+          <div class="status-circle">✓</div>
+          <div class="status-label">Order Placed</div>
+          <div class="status-date" id="date1">Today</div>
+        </div>
+
+        <div class="status-step active" id="step2">
+          <div class="status-circle">📦</div>
+          <div class="status-label">Processing</div>
+          <div class="status-date">In Progress</div>
+        </div>
+
+        <div class="status-step pending" id="step3">
+          <div class="status-circle">🚚</div>
+          <div class="status-label">Shipped</div>
+          <div class="status-date">Pending</div>
+        </div>
+
+        <div class="status-step pending" id="step4">
+          <div class="status-circle">✓</div>
+          <div class="status-label">Delivered</div>
+          <div class="status-date">Pending</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Details -->
+    <div class="card">
+      <div class="details">
+        <div class="details-title">🛍️ Order Details</div>
+        <div class="detail-item">
+          <span class="detail-label">Items:</span>
+          <span class="detail-value">1x Product</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Order Total:</span>
+          <span class="detail-value">₹12,999</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Discount:</span>
+          <span class="detail-value">-₹1,800</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Delivery Charges:</span>
+          <span class="detail-value">₹0 (FREE)</span>
+        </div>
+        <div class="detail-item" style="border-top: 2px solid #2874f0; padding-top: 12px; margin-top: 12px;">
+          <span class="detail-label" style="color: #2874f0; font-size: 1rem;">Final Amount:</span>
+          <span class="detail-value" style="color: #2874f0; font-size: 1rem;">₹11,199</span>
+        </div>
+      </div>
+
+      <div class="details" style="margin-top: 16px;">
+        <div class="details-title">📍 Delivery Address</div>
+        <div class="detail-item">
+          <div style="color: #333; line-height: 1.6;">
+            <p style="margin-bottom: 6px;"><strong>John Doe</strong></p>
+            <p style="margin-bottom: 6px;">123 Main Street, Apt 4B</p>
+            <p style="margin-bottom: 6px;">New Delhi, Delhi 110001</p>
+            <p>Phone: +91-9876543210</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="details" style="margin-top: 16px;">
+        <div class="details-title">💳 Payment Method</div>
+        <div class="detail-item">
+          <span class="detail-label">Method:</span>
+          <span class="detail-value">UPI / Netbanking</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Status:</span>
+          <span class="detail-value" style="color: #28a745;">✓ Completed</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Support -->
+    <div class="card" style="background: #fff3cd; border-left: 4px solid #ff9800;">
+      <p style="color: #333; margin-bottom: 8px;">
+        <strong>ℹ️ Note:</strong> This is a demo order tracking page. In a real application, this would show actual order status from the backend API.
+      </p>
+      <p style="color: #666; font-size: 0.95rem;">
+        Your order has been confirmed and is being prepared for shipment. You will receive an email notification once it's dispatched.
+      </p>
+    </div>
+
+    <!-- Actions -->
+    <div class="buttons">
+      <a href="home.html" class="btn btn-primary">Continue Shopping</a>
+      <a href="cart.html" class="btn btn-secondary">View Cart</a>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 ShopKart | Made with ❤️ for learning</p>
+  </footer>
+
+  <script>
+    // Initialize with order data from localStorage or URL
+    (function() {
+      // Generate or retrieve order ID
+      let orderId = localStorage.getItem('lastOrderId');
+      if (!orderId) {
+        orderId = 'SK' + Math.floor(Math.random() * 900000 + 100000);
+        localStorage.setItem('lastOrderId', orderId);
+      }
+      document.getElementById('displayOrderId').textContent = '#' + orderId;
+
+      // Set order date
+      const today = new Date();
+      const dateString = today.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+      document.getElementById('displayOrderDate').textContent = dateString;
+      document.getElementById('date1').textContent = dateString;
+
+      // Simulate different order statuses (for demo purposes)
+      // In a real app, this would come from the backend API
+      const statuses = ['Processing', 'Shipped', 'Out for Delivery', 'Delivered'];
+      const randomStatus = Math.floor(Math.random() * statuses.length);
+      document.getElementById('displayStatus').textContent = statuses[randomStatus];
+
+      // Update timeline based on status
+      const step2 = document.getElementById('step2');
+      const step3 = document.getElementById('step3');
+      const step4 = document.getElementById('step4');
+
+      if (randomStatus >= 1) {
+        step2.classList.remove('active');
+        step2.classList.add('completed');
+        step3.classList.remove('pending');
+        step3.classList.add('active');
+      }
+      if (randomStatus >= 2) {
+        step3.classList.remove('active');
+        step3.classList.add('completed');
+        step4.classList.remove('pending');
+        step4.classList.add('active');
+      }
+      if (randomStatus >= 3) {
+        step4.classList.remove('pending');
+        step4.classList.add('completed');
+        step4.classList.remove('active');
+      }
+    })();
+  </script>
+</body>
+</html>

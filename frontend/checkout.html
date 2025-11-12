@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Checkout | ShopKart</title>
+  <style>
+    /* Basic reset & fonts */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Poppins", system-ui, Arial; background:#f1f3f6; color:#222; }
+    a { color: inherit; text-decoration: none; }
+
+    /* Navbar */
+    .navbar {
+      background:#2874f0; color:#fff; padding:12px 20px; display:flex; align-items:center; justify-content:space-between;
+    }
+    .logo { font-weight:700; font-size:1.25rem; cursor:pointer; }
+    .nav-links a { color:#fff; margin-left:16px; font-weight:600; }
+
+    /* Page layout */
+    .container { width:92%; max-width:1100px; margin:28px auto; display:flex; gap:24px; }
+    .left, .right { background:#fff; border-radius:10px; padding:18px; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
+    .left { flex:2; }
+    .right { flex:1; min-width:260px; height:fit-content; }
+
+    h2 { margin-bottom:12px; color:#333; }
+    label { display:block; margin:10px 0 6px; font-weight:600; font-size:0.95rem; }
+    input[type="text"], input[type="tel"], textarea, select {
+      width:100%; padding:10px; border:1px solid #d6dbe6; border-radius:6px; font-size:0.95rem;
+    }
+    textarea { resize:vertical; min-height:70px; }
+
+    .payment-options { margin-top:18px; }
+    .payment-options label { display:flex; align-items:center; gap:10px; margin:8px 0; cursor:pointer; font-weight:500; }
+    .payment-options input[type="radio"] { transform:scale(1.05); }
+
+    .order-summary { line-height:1.6; }
+    .order-summary p { margin:8px 0; }
+    .total { font-weight:700; font-size:1.05rem; color:#2874f0; margin-top:8px; }
+
+    .btn {
+      display:inline-block; width:100%; padding:12px 14px; border-radius:8px; border:none; cursor:pointer; font-weight:700;
+      margin-top:14px; text-align:center;
+    }
+    .btn-place { background:#fb641b; color:#fff; border: none; }
+    .btn-place:hover { background:#f27a2f; }
+
+    .small-note { font-size:0.92rem; color:#666; margin-top:8px; }
+
+    /* responsive */
+    @media (max-width:840px){
+      .container { flex-direction:column; }
+      .right { order:2; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo" onclick="location.href='home.html'">ShopKart</div>
+    <div class="nav-links">
+      <a href="abc.html">Login</a>
+      <a href="cart.html">Cart 🛒</a>
+    </div>
+  </header>
+
+  <!-- Checkout content -->
+  <main class="container">
+    <!-- Left: Address & Payment -->
+    <section class="left" aria-label="Delivery and payment">
+      <h2>Delivery Address</h2>
+
+      <form id="checkoutForm" novalidate>
+        <label for="name">Full name</label>
+        <input id="name" name="name" type="text" placeholder="John Doe" required>
+
+        <label for="phone">Phone number</label>
+        <input id="phone" name="phone" type="tel" placeholder="9876543210" pattern="[0-9]{10}" required>
+
+        <label for="address">Address</label>
+        <textarea id="address" name="address" placeholder="House no, street, area" required></textarea>
+
+        <label for="city">City</label>
+        <input id="city" name="city" type="text" placeholder="City" required>
+
+        <label for="pincode">Pincode</label>
+        <input id="pincode" name="pincode" type="text" placeholder="Pincode" pattern="[0-9]{5,7}" required>
+
+        <div class="payment-options" aria-label="Payment options">
+          <h2 style="margin-top:14px; font-size:1rem;">Payment Options</h2>
+          <label><input type="radio" name="payment" value="upi" checked> UPI / Netbanking</label>
+          <label><input type="radio" name="payment" value="card"> Debit / Credit Card</label>
+          <label><input type="radio" name="payment" value="cod"> Cash on Delivery (COD)</label>
+        </div>
+
+        <p class="small-note">All fields are required. This is a front-end demo — no real payment will be processed.</p>
+
+        <!-- Place Order triggers validation then redirect -->
+        <button type="button" id="placeOrderBtn" class="btn btn-place">Place Order</button>
+      </form>
+    </section>
+
+    <!-- Right: Order summary -->
+    <aside class="right" aria-label="Order summary">
+      <h2>Order Summary</h2>
+      <div class="order-summary" id="orderSummary">
+        <!-- Items listed here dynamically (example static items below) -->
+        <p>Smartphone XYZ Pro — ₹12,999</p>
+        <p>Noise Cancelling Headphones — ₹2,499</p>
+        <hr>
+        <p class="total" id="orderTotal">Total: ₹14,498</p>
+      </div>
+      <button class="btn" style="margin-top:10px;" onclick="location.href='cart.html'">Back to Cart</button>
+    </aside>
+  </main>
+
+  <script>
+    // Basic client-side validation and redirect
+    (function(){
+      const btn = document.getElementById('placeOrderBtn');
+      const form = document.getElementById('checkoutForm');
+
+      function showAlert(msg){
+        // Simple UI-friendly alert: use window.alert for now
+        window.alert(msg);
+      }
+
+      btn.addEventListener('click', () => {
+        // Check required fields
+        const name = document.getElementById('name').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const address = document.getElementById('address').value.trim();
+        const city = document.getElementById('city').value.trim();
+        const pincode = document.getElementById('pincode').value.trim();
+
+        if (!name) return showAlert('Please enter your full name.');
+        if (!/^\d{10}$/.test(phone)) return showAlert('Please enter a valid 10-digit phone number.');
+        if (!address) return showAlert('Please enter your address.');
+        if (!city) return showAlert('Please enter your city.');
+        if (!/^\d{5,7}$/.test(pincode)) return showAlert('Please enter a valid pincode.');
+
+        // All good — redirect to success page
+        // You can pass order info via querystring if needed later
+        window.location.href = 'success.html';
+      });
+    })();
+  </script>
+</body>
+</html>

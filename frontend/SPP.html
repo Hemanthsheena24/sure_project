@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mobiles | ShopKart</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f5f5f5;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #2874f0;
+      padding: 10px 50px;
+      color: white;
+    }
+
+    .navbar .logo {
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      margin-left: 15px;
+      font-weight: 500;
+    }
+
+    /* Product Section */
+    .product-section {
+      padding: 30px;
+    }
+
+    .product-section h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .card img {
+      width: 100%;
+      height: 220px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .card h3 {
+      font-size: 18px;
+      margin: 10px 0 5px;
+    }
+
+    .card p {
+      color: gray;
+      font-size: 14px;
+    }
+
+    .card .price {
+      color: #2874f0;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .card button {
+      background-color: #ff9f00;
+      border: none;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .card button:hover {
+      background-color: #fb641b;
+    }
+
+    footer {
+      background-color: #2874f0;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo" onclick="window.location.href='home.html'">ShopKart</div>
+    <div class="nav-links">
+      <a href="home.html">Home</a>
+      <a href="cart.html">Cart 🛒</a>
+    </div>
+  </header>
+
+  <!-- Product Section -->
+  <section class="product-section">
+    <h2>Top Selling Mobiles</h2>
+    <div class="product-grid" id="productGrid"></div>
+  </section>
+
+  <footer>
+    <p>© 2025 ShopKart | All Rights Reserved</p>
+  </footer>
+
+  <script>
+    const products = [
+      { name: "iPhone 15 Pro", price: 139999, image: "https://tse2.mm.bing.net/th/id/OIP.8ZDOKygJXbUYxqwg0JGLNgHaJG?pid=Api&P=0&h=180", desc: "128GB | A17 Bionic | 48MP" },
+      { name: "Samsung Galaxy S23", price: 74999, image: "https://s.yimg.com/ny/api/res/1.2/XUWc_7XyZNF4T.STPSB9ZA--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyMDA7aD04MDA-/https://s.yimg.com/os/creatr-uploaded-images/2023-01/f573a6a2-a092-11ed-be2f-3d10b3e5b155", desc: "8GB | 256GB | 50MP" },
+      { name: "OnePlus 12", price: 59999, image: "https://tse4.mm.bing.net/th/id/OIP.HUu3Q4iRmr5LizOANhzXbgHaF5?pid=Api&P=0&h=180", desc: "12GB | 256GB | Snapdragon 8 Gen 2" },
+      { name: "Redmi Note 13 Pro+", price: 28999, image: "https://tse3.mm.bing.net/th/id/OIP.-gtQLA4kEJpTYDW_OrYByAHaEK?pid=Api&P=0&h=180i", desc: "8GB | 256GB | 200MP Camera" },
+      { name: "Vivo V30 Pro", price: 33999, image: "https://tse2.mm.bing.net/th/id/OIP.fHLEfgOvB2vA-D0xNsOxJwHaEK?pid=Api&P=0&h=180", desc: "8GB | 128GB | 64MP OIS" },
+      { name: "Realme GT Neo 5", price: 39999, image: "https://tse4.mm.bing.net/th/id/OIP.7v1O7Qnbzl7eWJn6Iq-zygHaHa?pid=Api&P=0&h=180", desc: "12GB | 256GB | 150W Fast Charge" },
+    ];
+
+    const productGrid = document.getElementById("productGrid");
+
+    products.forEach((product, index) => {
+      const card = document.createElement("div");
+      card.classList.add("card");
+      card.innerHTML = `
+        <img src="${product.image}" alt="${product.name}">
+        <h3>${product.name}</h3>
+        <p>${product.desc}</p>
+        <p class="price">₹${product.price.toLocaleString()}</p>
+        <button onclick="addToCart(${index})">Add to Cart</button>
+      `;
+      productGrid.appendChild(card);
+    });
+
+    function addToCart(index) {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const product = products[index];
+      const existing = cart.find(item => item.name === product.name);
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({ ...product, quantity: 1 });
+      }
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert(`${product.name} added to your cart!`);
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShopEase | Login & Register</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #2874f0, #004aad);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      width: 380px;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      transition: 0.5s ease;
+    }
+
+    .form-box {
+      padding: 40px;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 26px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .input-box {
+      position: relative;
+      margin: 25px 0;
+    }
+
+    .input-box input {
+      width: 100%;
+      padding: 12px 40px 12px 15px;
+      border: 1.5px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+      transition: 0.3s ease;
+    }
+
+    .input-box input:focus {
+      border-color: #2874f0;
+    }
+
+    .input-box i {
+      position: absolute;
+      right: 15px;
+      top: 13px;
+      color: #888;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #2874f0;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    button:hover {
+      background: #1a56c5;
+    }
+
+    p {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    p span {
+      color: #2874f0;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    p span:hover {
+      text-decoration: underline;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Login Form -->
+    <div class="form-box" id="loginForm">
+      <h2>Welcome Back!</h2>
+      <div class="input-box">
+        <input type="text" placeholder="Email or Username" required />
+        <i class="fas fa-user"></i>
+      </div>
+      <div class="input-box">
+        <input type="password" placeholder="Password" required />
+        <i class="fas fa-lock"></i>
+      </div>
+      <button>Login</button>
+      <p>New here? <span id="toRegister">Create Account</span></p>
+    </div>
+
+    <!-- Register Form -->
+    <div class="form-box hidden" id="registerForm">
+      <h2>Create Account</h2>
+      <div class="input-box">
+        <input type="text" placeholder="Full Name" required />
+        <i class="fas fa-user"></i>
+      </div>
+      <div class="input-box">
+        <input type="email" placeholder="Email" required />
+        <i class="fas fa-envelope"></i>
+      </div>
+      <div class="input-box">
+        <input type="password" placeholder="Password" required />
+        <i class="fas fa-lock"></i>
+      </div>
+      <button>Register</button>
+      <p>Already have an account? <span id="toLogin">Login</span></p>
+    </div>
+  </div>
+
+  <script src="https://kit.fontawesome.com/a81368914c.js" crossorigin="anonymous"></script>
+  <script>
+    const loginForm = document.getElementById("loginForm");
+    const registerForm = document.getElementById("registerForm");
+    const toRegister = document.getElementById("toRegister");
+    const toLogin = document.getElementById("toLogin");
+
+    toRegister.addEventListener("click", () => {
+      loginForm.classList.add("hidden");
+      registerForm.classList.remove("hidden");
+    });
+
+    toLogin.addEventListener("click", () => {
+      registerForm.classList.add("hidden");
+      loginForm.classList.remove("hidden");
+    });
+
+    // Always show login form by default
+    loginForm.classList.remove("hidden");
+    registerForm.classList.add("hidden");
+
+    // Handle Login
+    document.querySelector("#loginForm button").addEventListener("click", () => {
+      const emailOrUsername = loginForm.querySelector('input[type="text"]').value.trim();
+      const password = loginForm.querySelector('input[type="password"]').value.trim();
+      
+      if (!emailOrUsername || !password) {
+        alert("Please fill in all fields!");
+        return;
+      }
+      
+      // Save username to localStorage and redirect
+      localStorage.setItem("username", emailOrUsername);
+      localStorage.setItem("registeredUser", "true");
+      alert("Login successful!");
+      window.location.href = "home.html";
+    });
+
+    // Simulate register
+    document.querySelector("#registerForm button").addEventListener("click", () => {
+      const fullName = registerForm.querySelector('input[type="text"]').value.trim();
+      const email = registerForm.querySelector('input[type="email"]').value.trim();
+      const password = registerForm.querySelector('input[type="password"]').value.trim();
+      
+      if (!fullName || !email || !password) {
+        alert("Please fill in all fields!");
+        return;
+      }
+      
+      localStorage.setItem("registeredUser", "true");
+      localStorage.setItem("username", fullName);
+      alert("Registration successful! You can now log in.");
+      window.location.href = "home.html";
+    });
+  </script>
+</body>
+</html>

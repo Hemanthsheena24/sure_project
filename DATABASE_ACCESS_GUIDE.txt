@@ -1,0 +1,452 @@
+📊 DATABASE ACCESS GUIDE
+═════════════════════════════════════════════════════════════════════════════
+
+🔌 PORT NUMBERS
+═════════════════════════════════════════════════════════════════════════════
+
+Frontend:
+  ✓ Port: 8080
+  ✓ URL: http://localhost:8080
+  ✓ Purpose: Shopping website
+
+Backend API:
+  ✓ Port: 5000
+  ✓ URL: http://localhost:5000/api
+  ✓ Purpose: REST API server
+
+MongoDB Database:
+  ✓ Port: 27017
+  ✓ Host: localhost:27017
+  ✓ Username: admin
+  ✓ Password: password123
+  ✓ Purpose: NoSQL database
+
+Mongo Express (Database Admin UI):
+  ✓ Port: 8081
+  ✓ URL: http://localhost:8081
+  ✓ Username: admin
+  ✓ Password: admin
+  ✓ Purpose: Web interface to view/edit database
+
+════════════════════════════════════════════════════════════════════════════
+🌐 QUICK ACCESS LINKS
+════════════════════════════════════════════════════════════════════════════
+
+Frontend Website:
+  👉 http://localhost:8080
+
+Backend API Health Check:
+  👉 http://localhost:5000/api/health
+
+Database Admin Interface:
+  👉 http://localhost:8081
+
+All Products API:
+  👉 http://localhost:5000/api/products
+
+════════════════════════════════════════════════════════════════════════════
+✅ METHOD 1: MONGO EXPRESS (EASIEST - WEB INTERFACE)
+════════════════════════════════════════════════════════════════════════════
+
+This is the easiest way! A web-based GUI to view your database.
+
+Step 1: Open Mongo Express
+  ▶ Go to: http://localhost:8081
+
+Step 2: Login (if prompted)
+  ▶ Username: admin
+  ▶ Password: admin
+
+Step 3: View Database
+  ▶ You should see "shopkart" database in the left sidebar
+  ▶ Click on it to expand
+
+Step 4: View Collections
+  The "shopkart" database contains 4 collections:
+  
+  1. users
+     ├─ Registered users and their profiles
+     ├─ Fields: name, email, password, phone, address, city, pincode
+     └─ Timestamps: createdAt, updatedAt
+
+  2. products
+     ├─ Product catalog (6 sample products)
+     ├─ Fields: name, description, price, originalPrice, discount, 
+     │          image, category, stock, rating, reviews
+     └─ Timestamps: createdAt, updatedAt
+
+  3. carts
+     ├─ User shopping carts
+     ├─ Fields: user (reference), items (array), totalPrice
+     └─ Timestamps: createdAt, updatedAt
+
+  4. orders
+     ├─ Order history
+     ├─ Fields: user (reference), items (array), deliveryAddress,
+     │          paymentMethod, totalAmount, discount, deliveryCharges, status
+     └─ Timestamps: createdAt, updatedAt
+
+Step 5: Click on a Collection
+  ▶ For example, click "products"
+  ▶ You'll see all products with their details
+  ▶ You can:
+    ✓ View documents
+    ✓ Create new documents
+    ✓ Edit existing documents
+    ✓ Delete documents
+
+════════════════════════════════════════════════════════════════════════════
+✅ METHOD 2: MONGO CLI (COMMAND LINE)
+════════════════════════════════════════════════════════════════════════════
+
+Use MongoDB CLI to query the database from terminal.
+
+Step 1: Access MongoDB Shell
+  Command: docker-compose exec mongo mongosh -u admin -p password123
+  
+  Expected Output:
+    ┌──────────────────────────────────────────────────────────┐
+    │ Connecting to:    mongodb://localhost:27017/             │
+    │ Using MongoDB:    6.0.0                                  │
+    │ Using Mongosh:    1.x.x                                  │
+    │                                                          │
+    │ test> _                                                  │
+    └──────────────────────────────────────────────────────────┘
+
+Step 2: Select Database
+  Command: use shopkart
+  
+  Expected Output: switched to db shopkart
+
+Step 3: View All Collections
+  Command: show collections
+  
+  Expected Output:
+    carts
+    orders
+    products
+    users
+
+Step 4: View Collection Documents
+
+  View all users:
+    db.users.find()
+    
+  View all products:
+    db.products.find()
+    
+  View all carts:
+    db.carts.find()
+    
+  View all orders:
+    db.orders.find()
+
+Step 5: Pretty Print (Format nicely)
+
+  View all products formatted:
+    db.products.find().pretty()
+    
+  View one product:
+    db.products.findOne()
+
+Step 6: Count Documents
+
+  Count users:
+    db.users.countDocuments()
+    
+  Count products:
+    db.products.countDocuments()
+    
+  Count carts:
+    db.carts.countDocuments()
+    
+  Count orders:
+    db.orders.countDocuments()
+
+Step 7: Exit MongoDB Shell
+  Command: exit
+  
+  Or press: Ctrl+C
+
+════════════════════════════════════════════════════════════════════════════
+✅ METHOD 3: REST API (FROM YOUR CODE)
+════════════════════════════════════════════════════════════════════════════
+
+Use the REST API to query data programmatically.
+
+Check API Health:
+  curl http://localhost:5000/api/health
+
+Get All Products:
+  curl http://localhost:5000/api/products
+
+Get Products by Category:
+  curl http://localhost:5000/api/products/category/Mobiles
+
+Get Single Product (replace ID with actual ID):
+  curl http://localhost:5000/api/products/PRODUCT_ID
+
+Get All Users (if implemented):
+  curl http://localhost:5000/api/users/profile/USER_ID
+
+════════════════════════════════════════════════════════════════════════════
+📋 SAMPLE DATA STRUCTURE
+════════════════════════════════════════════════════════════════════════════
+
+USERS Collection:
+┌─────────────────────────────────────────────────────────┐
+│ {                                                       │
+│   _id: ObjectId,                                        │
+│   name: "John Doe",                                     │
+│   email: "john@example.com",                            │
+│   password: "hashed_password_here",                     │
+│   phone: "9876543210",                                  │
+│   address: "123 Main Street",                           │
+│   city: "Delhi",                                        │
+│   pincode: "110001",                                    │
+│   createdAt: 2025-11-11T10:30:00.000Z,                 │
+│   updatedAt: 2025-11-11T10:30:00.000Z                  │
+│ }                                                       │
+└─────────────────────────────────────────────────────────┘
+
+PRODUCTS Collection:
+┌─────────────────────────────────────────────────────────┐
+│ {                                                       │
+│   _id: ObjectId,                                        │
+│   name: "Smartphone XYZ Pro",                           │
+│   description: "High-performance smartphone...",        │
+│   price: 12999,                                         │
+│   originalPrice: 16999,                                 │
+│   discount: 23,                                         │
+│   image: "https://example.com/image.jpg",               │
+│   category: "Mobiles",                                  │
+│   stock: 50,                                            │
+│   rating: 4.5,                                          │
+│   reviews: [],                                          │
+│   createdAt: 2025-11-11T10:00:00.000Z,                 │
+│   updatedAt: 2025-11-11T10:00:00.000Z                  │
+│ }                                                       │
+└─────────────────────────────────────────────────────────┘
+
+CARTS Collection:
+┌─────────────────────────────────────────────────────────┐
+│ {                                                       │
+│   _id: ObjectId,                                        │
+│   user: ObjectId("user_id"),                            │
+│   items: [                                              │
+│     {                                                   │
+│       product: ObjectId("product_id"),                  │
+│       quantity: 2,                                      │
+│       price: 12999                                      │
+│     }                                                   │
+│   ],                                                    │
+│   totalPrice: 25998,                                    │
+│   createdAt: 2025-11-11T10:30:00.000Z,                 │
+│   updatedAt: 2025-11-11T10:30:00.000Z                  │
+│ }                                                       │
+└─────────────────────────────────────────────────────────┘
+
+ORDERS Collection:
+┌─────────────────────────────────────────────────────────┐
+│ {                                                       │
+│   _id: ObjectId,                                        │
+│   user: ObjectId("user_id"),                            │
+│   items: [...],                                         │
+│   deliveryAddress: {                                    │
+│     name: "John Doe",                                   │
+│     phone: "9876543210",                                │
+│     address: "123 Main Street",                         │
+│     city: "Delhi",                                      │
+│     pincode: "110001"                                   │
+│   },                                                    │
+│   paymentMethod: "upi",                                 │
+│   totalAmount: 26548,                                   │
+│   discount: 1820,                                       │
+│   deliveryCharges: 50,                                  │
+│   status: "pending",                                    │
+│   createdAt: 2025-11-11T10:30:00.000Z,                 │
+│   updatedAt: 2025-11-11T10:30:00.000Z                  │
+│ }                                                       │
+└─────────────────────────────────────────────────────────┘
+
+════════════════════════════════════════════════════════════════════════════
+🎯 STEP-BY-STEP: VIEW DATABASE WITH MONGO EXPRESS
+════════════════════════════════════════════════════════════════════════════
+
+This is the EASIEST way to check database:
+
+1. Open browser
+   👉 http://localhost:8081
+
+2. You see Mongo Express interface
+   Left sidebar shows databases
+
+3. Click on "shopkart" database
+   It expands to show 4 collections
+
+4. Click on "products" collection
+   You see all 6 sample products
+
+5. Click on a product
+   You see all details (name, price, description, etc.)
+
+6. Click on "users" collection
+   You see registered users
+
+7. Click on "orders" collection
+   You see all orders placed
+
+8. Click on "carts" collection
+   You see all shopping carts
+
+That's it! You can view, edit, create, and delete documents here.
+
+════════════════════════════════════════════════════════════════════════════
+🛠️ USEFUL MONGODB COMMANDS
+════════════════════════════════════════════════════════════════════════════
+
+After: docker-compose exec mongo mongosh -u admin -p password123
+
+Switch to database:
+  use shopkart
+
+View all collections:
+  show collections
+
+Count documents in a collection:
+  db.users.countDocuments()
+  db.products.countDocuments()
+  db.carts.countDocuments()
+  db.orders.countDocuments()
+
+View all documents in a collection:
+  db.users.find()
+  db.products.find()
+  db.carts.find()
+  db.orders.find()
+
+View formatted (prettier):
+  db.products.find().pretty()
+
+View first document:
+  db.products.findOne()
+
+View specific document by name:
+  db.products.findOne({ name: "Smartphone XYZ Pro" })
+
+View products by category:
+  db.products.find({ category: "Mobiles" })
+
+View user by email:
+  db.users.findOne({ email: "john@example.com" })
+
+Delete all data from a collection:
+  db.users.deleteMany({})
+  db.products.deleteMany({})
+
+Drop entire collection:
+  db.users.drop()
+
+Exit:
+  exit
+
+════════════════════════════════════════════════════════════════════════════
+📊 VERIFY DATABASE HAS DATA
+════════════════════════════════════════════════════════════════════════════
+
+Check if MongoDB is running:
+  docker-compose ps mongo
+  Expected: Status = "Up"
+
+Check if data exists:
+  docker-compose exec mongo mongosh -u admin -p password123 -e "use shopkart; db.products.countDocuments()"
+  
+  If returns 0: No products
+  If returns 6: Sample products loaded
+  If returns >6: You added more products
+
+Load sample data (if needed):
+  docker-compose exec backend npm run seed
+  
+  Expected output: "Sample products inserted successfully"
+
+════════════════════════════════════════════════════════════════════════════
+🔍 TROUBLESHOOTING DATABASE ACCESS
+════════════════════════════════════════════════════════════════════════════
+
+Issue: Can't access Mongo Express at http://localhost:8081
+Solution:
+  • Check if containers are running: docker-compose ps
+  • Restart containers: docker-compose restart
+  • Check logs: docker-compose logs mongo-express
+
+Issue: Can't connect to MongoDB CLI
+Solution:
+  • Verify MongoDB is running: docker-compose ps mongo
+  • Check password is correct: password123
+  • Try: docker-compose exec mongo mongosh
+
+Issue: No data in database
+Solution:
+  • Load sample data: docker-compose exec backend npm run seed
+  • Wait a few seconds for it to complete
+  • Refresh Mongo Express page
+
+Issue: Connection refused on localhost:27017
+Solution:
+  • MongoDB might not be running
+  • Run: docker-compose up -d
+  • Wait 30 seconds for startup
+  • Try again
+
+════════════════════════════════════════════════════════════════════════════
+📌 QUICK REFERENCE SUMMARY
+════════════════════════════════════════════════════════════════════════════
+
+To check database contents:
+
+EASIEST:
+  1. Go to: http://localhost:8081
+  2. Login: admin/admin
+  3. Click shopkart database
+  4. Click any collection
+  5. View documents
+
+VIA TERMINAL:
+  1. docker-compose exec mongo mongosh -u admin -p password123
+  2. use shopkart
+  3. db.products.find().pretty()
+  4. exit
+
+VIA API:
+  1. curl http://localhost:5000/api/products
+  2. Or open in browser: http://localhost:5000/api/products
+
+════════════════════════════════════════════════════════════════════════════
+📍 ALL PORT NUMBERS SUMMARY
+════════════════════════════════════════════════════════════════════════════
+
+Service               Port    URL/Address           Purpose
+─────────────────────────────────────────────────────────────────────────
+Frontend              8080    localhost:8080        Shopping website
+Backend API           5000    localhost:5000        REST API
+MongoDB               27017   localhost:27017       Database
+Mongo Express         8081    localhost:8081        Database GUI
+─────────────────────────────────────────────────────────────────────────
+
+Connection Details:
+  MongoDB Username:    admin
+  MongoDB Password:    password123
+  Database Name:       shopkart
+  Mongo Express User:  admin
+  Mongo Express Pass:  admin
+
+════════════════════════════════════════════════════════════════════════════
+
+🎯 QUICK START:
+
+View Database GUI:     http://localhost:8081
+View API Products:     http://localhost:5000/api/products
+View Website:          http://localhost:8080
+
+═════════════════════════════════════════════════════════════════════════════
